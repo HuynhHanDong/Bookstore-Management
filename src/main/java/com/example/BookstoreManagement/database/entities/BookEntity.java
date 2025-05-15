@@ -1,5 +1,7 @@
 package com.example.BookstoreManagement.database.entities;
 
+import com.example.BookstoreManagement.modules.books.dto.CreateBookDTO;
+import com.example.BookstoreManagement.modules.books.dto.UpdateBookDTO;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,16 +18,16 @@ public class BookEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer bookId;
 
-    @Column(nullable = false)
+    @Column(length = 50, nullable = false)
     private String title;
 
-    @Column(length = 100)
+    @Column
     private String description;
 
-    @Column(unique = true, nullable = false)
+    @Column(length = 13, unique = true, nullable = false)
     private String isbn;
 
-    @Column(nullable = false)
+    @Column(length = 100, nullable = false)
     private String author;
 
     @Column(nullable = false)
@@ -36,10 +38,20 @@ public class BookEntity {
     @LastModifiedDate
     private Instant updatedAt;
 
-    public BookEntity(String title, String description, String isbn, String author) {
-        this.title = title;
-        this.description = description;
-        this.isbn = isbn;
-        this.author = author;
+    public BookEntity(CreateBookDTO dto) {
+        this.title = dto.getTitle();
+        this.description = dto.getDescription();
+        this.isbn = dto.getIsbn();
+        this.author = dto.getAuthor();
+        this.createdAt = Instant.now();
+        this.updatedAt = Instant.now();
+    }
+
+    public BookEntity(UpdateBookDTO dto) {
+        this.bookId = dto.getBookId();
+        this.title = dto.getTitle();
+        this.description = dto.getDescription();
+        this.isbn = dto.getIsbn();
+        this.author = dto.getAuthor();
     }
 }
