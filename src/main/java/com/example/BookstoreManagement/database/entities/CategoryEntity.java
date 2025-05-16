@@ -1,5 +1,6 @@
 package com.example.BookstoreManagement.database.entities;
 
+import com.example.BookstoreManagement.modules.categories.dto.CategoryRequestDTO;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,22 +17,24 @@ public class CategoryEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer categoryId;
 
-    @Column(length = 30, nullable = false)
+    @Column(length = 30, unique = true, nullable = false)
     private String name;
 
     @Column
     private String description;
 
-    @Column(nullable = false)
+    @Column
     @CreatedDate
     private Instant createdAt;
 
-    @Column(nullable = false)
+    @Column
     @LastModifiedDate
     private Instant updatedAt;
 
-    public CategoryEntity(String name, String description) {
-        this.name = name;
-        this.description = description;
+    public CategoryEntity(CategoryRequestDTO dto) {
+        this.name = dto.getName();
+        this.description = dto.getDescription();
+        this.createdAt = Instant.now();
+        this.updatedAt = Instant.now();
     }
 }
