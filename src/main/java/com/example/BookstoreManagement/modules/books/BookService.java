@@ -2,8 +2,7 @@ package com.example.BookstoreManagement.modules.books;
 
 import com.example.BookstoreManagement.database.entities.BookEntity;
 import com.example.BookstoreManagement.database.repositories.BooksRepository;
-import com.example.BookstoreManagement.modules.books.dto.CreateBookDTO;
-import com.example.BookstoreManagement.modules.books.dto.UpdateBookDTO;
+import com.example.BookstoreManagement.modules.books.dto.BookRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,7 @@ public class BookService {
     @Autowired
     private BooksRepository booksRepository;
 
-    public void addBook(CreateBookDTO dto) {
+    public void addBook(BookRequestDTO dto) {
         Optional<BookEntity> checkIsbn = booksRepository.findByIsbn(dto.getIsbn());
         if (checkIsbn.isPresent()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ISBN already existed");
         BookEntity book = new BookEntity(dto);
@@ -31,14 +30,13 @@ public class BookService {
         return book.get();
     }
 
-    public void updateBook(Integer bookId, UpdateBookDTO dto) {
-        BookEntity bookEntity = getBook(bookId);
-        bookEntity.setTitle(dto.getTitle());
-        bookEntity.setDescription(dto.getDescription());
-        bookEntity.setIsbn(dto.getIsbn());
-        bookEntity.setAuthor(dto.getAuthor());
-        bookEntity.setUpdatedAt(Instant.now());
-        booksRepository.save(bookEntity);
+    public void updateBook(Integer bookId, BookRequestDTO dto) {
+        BookEntity book = getBook(bookId);
+        book.setTitle(dto.getTitle());
+        book.setDescription(dto.getDescription());
+        book.setIsbn(dto.getIsbn());
+        book.setAuthor(dto.getAuthor());
+        booksRepository.save(book);
     }
 
     public void deleteBook(Integer bookId) {
@@ -62,7 +60,7 @@ public class BookService {
 
     public BookEntity findByIsbn(String isbn) {
         Optional<BookEntity> book = booksRepository.findByIsbn(isbn);
-        if (book.isEmpty()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Book not found!");
+        if (book.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found!");
         return book.get();
     }
 }

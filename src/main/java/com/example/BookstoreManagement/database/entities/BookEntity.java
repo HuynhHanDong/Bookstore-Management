@@ -1,16 +1,17 @@
 package com.example.BookstoreManagement.database.entities;
 
-import com.example.BookstoreManagement.modules.books.dto.CreateBookDTO;
-import com.example.BookstoreManagement.modules.books.dto.UpdateBookDTO;
+import com.example.BookstoreManagement.modules.books.dto.BookRequestDTO;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Data
 @NoArgsConstructor
 public class BookEntity {
@@ -21,7 +22,7 @@ public class BookEntity {
     @Column(length = 50, nullable = false)
     private String title;
 
-    @Column
+    @Column(length = 100)
     private String description;
 
     @Column(length = 13, unique = true, nullable = false)
@@ -30,7 +31,7 @@ public class BookEntity {
     @Column(length = 100, nullable = false)
     private String author;
 
-    @Column(nullable = false)
+    @Column(updatable = false, nullable = false)
     @CreatedDate
     private Instant createdAt;
 
@@ -38,17 +39,7 @@ public class BookEntity {
     @LastModifiedDate
     private Instant updatedAt;
 
-    public BookEntity(CreateBookDTO dto) {
-        this.title = dto.getTitle();
-        this.description = dto.getDescription();
-        this.isbn = dto.getIsbn();
-        this.author = dto.getAuthor();
-        this.createdAt = Instant.now();
-        this.updatedAt = Instant.now();
-    }
-
-    public BookEntity(UpdateBookDTO dto) {
-        this.bookId = dto.getBookId();
+    public BookEntity(BookRequestDTO dto) {
         this.title = dto.getTitle();
         this.description = dto.getDescription();
         this.isbn = dto.getIsbn();

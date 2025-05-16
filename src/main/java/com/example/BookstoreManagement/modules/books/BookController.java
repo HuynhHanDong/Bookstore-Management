@@ -2,8 +2,7 @@ package com.example.BookstoreManagement.modules.books;
 
 import com.example.BookstoreManagement.database.entities.BookEntity;
 import com.example.BookstoreManagement.modules.books.dto.BookResponeDTO;
-import com.example.BookstoreManagement.modules.books.dto.CreateBookDTO;
-import com.example.BookstoreManagement.modules.books.dto.UpdateBookDTO;
+import com.example.BookstoreManagement.modules.books.dto.BookRequestDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/books")
@@ -20,13 +18,13 @@ public class BookController {
     private BookService bookService;
 
     @PostMapping("/")
-    public ResponseEntity addBook(@RequestBody @Valid CreateBookDTO dto) {
+    public ResponseEntity addBook(@RequestBody @Valid BookRequestDTO dto) {
         bookService.addBook(dto);
         return new ResponseEntity("Book added", HttpStatus.OK);
     }
 
     @PutMapping("/{bookId}")
-    public ResponseEntity updateBook(@PathVariable Integer bookId, @RequestBody @Valid UpdateBookDTO dto) {
+    public ResponseEntity updateBook(@PathVariable Integer bookId, @RequestBody @Valid BookRequestDTO dto) {
         bookService.updateBook(bookId, dto);
         return new ResponseEntity("Book updated", HttpStatus.OK);
     }

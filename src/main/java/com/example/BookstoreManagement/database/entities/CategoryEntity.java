@@ -6,10 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Data
 @NoArgsConstructor
 public class CategoryEntity {
@@ -20,21 +22,19 @@ public class CategoryEntity {
     @Column(length = 30, unique = true, nullable = false)
     private String name;
 
-    @Column
+    @Column(length = 100)
     private String description;
 
-    @Column
+    @Column(updatable = false, nullable = false)
     @CreatedDate
     private Instant createdAt;
 
-    @Column
+    @Column(nullable = false)
     @LastModifiedDate
     private Instant updatedAt;
 
     public CategoryEntity(CategoryRequestDTO dto) {
         this.name = dto.getName();
         this.description = dto.getDescription();
-        this.createdAt = Instant.now();
-        this.updatedAt = Instant.now();
     }
 }

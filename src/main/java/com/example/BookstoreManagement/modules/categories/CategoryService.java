@@ -34,7 +34,6 @@ public class CategoryService {
         CategoryEntity category = getCategory(categoryId);
         category.setName(dto.getName());
         category.setDescription(dto.getDescription());
-        category.setUpdatedAt(Instant.now());
         categoriesRepository.save(category);
     }
 
