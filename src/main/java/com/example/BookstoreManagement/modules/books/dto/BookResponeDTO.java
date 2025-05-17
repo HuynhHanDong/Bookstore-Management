@@ -4,7 +4,7 @@ import com.example.BookstoreManagement.database.entities.BookEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,8 +16,8 @@ public class BookResponeDTO {
     private String description;
     private String isbn;
     private String author;
-    private Instant createdAt;
-    private Instant updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public static BookResponeDTO fromEntity(BookEntity entity) {
         return new BookResponeDTO(

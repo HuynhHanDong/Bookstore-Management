@@ -8,7 +8,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -27,11 +27,11 @@ public class CategoryEntity {
 
     @Column(updatable = false, nullable = false)
     @CreatedDate
-    private Instant createdAt;
+    private LocalDateTime createdAt;
 
     @Column(nullable = false)
     @LastModifiedDate
-    private Instant updatedAt;
+    private LocalDateTime updatedAt;
 
     public CategoryEntity(CategoryRequestDTO dto) {
         this.name = dto.getName();

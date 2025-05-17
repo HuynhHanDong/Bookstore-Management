@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -33,5 +33,5 @@ public class ReviewEntity {
 
     @Column(updatable = false, nullable = false)
     @CreatedDate
-    private Instant createdAt;
+    private LocalDateTime createdAt;
 }

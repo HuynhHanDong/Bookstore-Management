@@ -4,7 +4,7 @@ import com.example.BookstoreManagement.database.entities.CategoryEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +14,8 @@ public class CategoryResponseDTO {
     private Integer categoryId;
     private String name;
     private String description;
-    private Instant createdAt;
-    private Instant updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public static CategoryResponseDTO fromEntity(CategoryEntity entity) {
         return new CategoryResponseDTO(
