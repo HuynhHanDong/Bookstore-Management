@@ -1,5 +1,6 @@
 package com.example.BookstoreManagement.database.entities;
 
+import com.example.BookstoreManagement.modules.users.dto.CreateUserDTO;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,7 +35,7 @@ public class UserEntity {
     @Column(nullable = false)
     private LocalDate dob;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "INT DEFAULT 0")
     private Integer role;
 
     @Column(updatable = false, nullable = false)
@@ -45,12 +46,13 @@ public class UserEntity {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public UserEntity(String email, String password, String fname, String lname, LocalDate dob, Integer role) {
-        this.email = email;
-        this.password = password;
-        this.fname = fname;
-        this.lname = lname;
-        this.dob = dob;
-        this.role = role;
+    public UserEntity(CreateUserDTO dto) {
+        //BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        this.email = dto.getEmail();
+        this.password = dto.getPassword();
+        this.fname = dto.getFname();
+        this.lname = dto.getLname();
+        this.dob = dto.getDob();
+        this.role = 0;
     }
 }
