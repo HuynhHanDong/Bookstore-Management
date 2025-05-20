@@ -32,9 +32,8 @@ public class BookCategoryService {
 
         Optional<CategoryEntity> category = categoriesRepository.findByCategoryId(dto.getCategoryId());
         if (category.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
-        System.out.println("checked");
+
         BookCategoryEntity bookCategory = new BookCategoryEntity(book.get(), category.get());
-        System.out.println("created");
         bookCategoriesRepository.save(bookCategory);
     }
 
@@ -47,14 +46,14 @@ public class BookCategoryService {
         return bookCategorylist;
     }
 
-    public List<BookCategoryEntity> findBookByCategory(String name) {
+    public List<BookCategoryEntity> findByCategoryName(String name) {
         Optional<CategoryEntity> category = categoriesRepository.findByName(name);
         if (category.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
         List<BookCategoryEntity> bookCategorylist = bookCategoriesRepository.findByCategoryId(category.get());
         return bookCategorylist;
     }
 
-    public List<BookCategoryEntity> findCategoryByBook(Integer bookId) {
+    public List<BookCategoryEntity> findByBookId(Integer bookId) {
         Optional<BookEntity> book = booksRepository.findByBookId(bookId);
         if (book.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found");
         List<BookCategoryEntity> bookCategorylist = bookCategoriesRepository.findByBookId(book.get());

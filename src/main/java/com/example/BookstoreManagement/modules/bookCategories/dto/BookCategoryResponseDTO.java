@@ -1,12 +1,14 @@
 package com.example.BookstoreManagement.modules.bookCategories.dto;
 
 import com.example.BookstoreManagement.database.entities.BookCategoryEntity;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
 public class BookCategoryResponseDTO {
     private Integer bookCategoryId;
     private Integer bookId;
@@ -14,20 +16,21 @@ public class BookCategoryResponseDTO {
     private Integer categoryId;
     private String categoryName;
 
-    public BookCategoryResponseDTO(BookCategoryEntity entity) {
-        this.bookCategoryId = entity.getBookCategoryId();
-        this.bookId = entity.getBookId().getBookId();
-        this.bookTitle = entity.getBookId().getTitle(); // assumes getTitle() exists
-        this.categoryId = entity.getCategoryId().getCategoryId();
-        this.categoryName = entity.getCategoryId().getName(); // assumes getName() exists
+    public static BookCategoryResponseDTO fromEntity(BookCategoryEntity entity) {
+        return new BookCategoryResponseDTO(
+                entity.getBookCategoryId(),
+                entity.getBookId().getBookId(),
+                entity.getBookId().getTitle(),
+                entity.getCategoryId().getCategoryId(),
+                entity.getCategoryId().getName()
+        );
     }
 
     public static List<BookCategoryResponseDTO> fromEntities(List<BookCategoryEntity> entities) {
         List<BookCategoryResponseDTO> list = new ArrayList<>();
 
         for (BookCategoryEntity entity : entities) {
-            BookCategoryResponseDTO dto = new BookCategoryResponseDTO(entity);
-            list.add(dto);
+            list.add(fromEntity(entity));
         }
 
         return list;

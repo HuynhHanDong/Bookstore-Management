@@ -31,19 +31,19 @@ public class BookCategoryController {
 
     @GetMapping("/")
     public ResponseEntity listBookCategory() {
-        List<BookCategoryEntity> entities = bookCategoryService.listBookCategory();
-        return new ResponseEntity(BookCategoryResponseDTO.fromEntities(entities), HttpStatus.OK);
+        List<BookCategoryEntity> bookCategoryList = bookCategoryService.listBookCategory();
+        return new ResponseEntity(BookCategoryResponseDTO.fromEntities(bookCategoryList), HttpStatus.OK);
     }
 
-    @GetMapping("/find-by-category/{name}")
+    @GetMapping("/category/{name}")
     public ResponseEntity findByCategoryName(@PathVariable String name) {
-        List<BookCategoryEntity> entities = bookCategoryService.findBookByCategory(name);
-        return new ResponseEntity(BookCategoryResponseDTO.fromEntities(entities), HttpStatus.OK);
+        List<BookCategoryEntity> bookCategoryList = bookCategoryService.findByCategoryName(name);
+        return new ResponseEntity(BookCategoryResponseDTO.fromEntities(bookCategoryList), HttpStatus.OK);
     }
 
-    @GetMapping("/find-by-book/{bookId}")
+    @GetMapping("/book/{bookId}")
     public ResponseEntity findByBookId(@PathVariable Integer bookId) {
-        List<BookCategoryEntity> entities = bookCategoryService.findCategoryByBook(bookId);
-        return new ResponseEntity(BookCategoryResponseDTO.fromEntities(entities), HttpStatus.OK);
+        List<BookCategoryEntity> bookCategoryList = bookCategoryService.findByBookId(bookId);
+        return new ResponseEntity(BookCategoryResponseDTO.fromEntities(bookCategoryList), HttpStatus.OK);
     }
 }

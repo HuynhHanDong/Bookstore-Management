@@ -34,4 +34,11 @@ public class ReviewEntity {
     @Column(updatable = false, nullable = false)
     @CreatedDate
     private LocalDateTime createdAt;
+
+    public ReviewEntity(Integer rate, BookEntity bookId, UserEntity userId, String content) {
+        this.rate = rate;
+        this.bookId = bookId;
+        this.userId = userId;
+        this.content = content;
+    }
 }
