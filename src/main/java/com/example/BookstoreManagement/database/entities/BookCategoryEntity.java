@@ -1,5 +1,6 @@
 package com.example.BookstoreManagement.database.entities;
 
+import com.example.BookstoreManagement.modules.bookCategories.dto.BookCategoryRequestDTO;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,4 +20,9 @@ public class BookCategoryEntity {
     @ManyToOne(optional = false)
     @JoinColumn(name = "category_id", nullable = false, foreignKey = @ForeignKey(name = "fk_book_category_categoryId"))
     private CategoryEntity categoryId;
+
+    public BookCategoryEntity(BookEntity book, CategoryEntity category) {
+        this.bookId = book;
+        this.categoryId = category;
+    }
 }
