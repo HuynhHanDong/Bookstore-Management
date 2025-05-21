@@ -4,10 +4,9 @@ import com.example.BookstoreManagement.database.entities.UserEntity;
 import com.example.BookstoreManagement.database.repositories.UsersRepository;
 import com.example.BookstoreManagement.modules.users.dto.CreateUserDTO;
 import com.example.BookstoreManagement.modules.users.dto.UpdateUserDTO;
-import com.example.BookstoreManagement.modules.users.dto.UserResponeDTO;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -33,8 +32,9 @@ public class UserService {
     }
 
     public void updateUser(Integer userId, UpdateUserDTO dto) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         UserEntity user = getUser(userId);
-        user.setPassword(dto.getPassword());
+        user.setPassword(encoder.encode(dto.getPassword()));
         user.setFname(dto.getFname());
         user.setLname(dto.getLname());
         user.setDob(dto.getDob());

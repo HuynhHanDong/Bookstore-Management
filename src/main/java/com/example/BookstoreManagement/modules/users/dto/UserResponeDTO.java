@@ -1,7 +1,6 @@
 package com.example.BookstoreManagement.modules.users.dto;
 
 import com.example.BookstoreManagement.database.entities.UserEntity;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

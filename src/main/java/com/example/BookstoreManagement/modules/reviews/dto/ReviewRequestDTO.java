@@ -1,7 +1,5 @@
 package com.example.BookstoreManagement.modules.reviews.dto;
 
-import com.example.BookstoreManagement.database.entities.BookEntity;
-import com.example.BookstoreManagement.database.entities.UserEntity;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

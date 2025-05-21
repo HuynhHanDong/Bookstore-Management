@@ -1,6 +1,7 @@
 package com.example.BookstoreManagement.modules.users.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -19,6 +20,6 @@ public class UpdateUserDTO {
     @Size(max = 30)
     private String lname;
 
-    @NotBlank
+    @NotNull
     private LocalDate dob;
 }

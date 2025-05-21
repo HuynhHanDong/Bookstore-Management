@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -32,8 +33,8 @@ public class AuthService {
         Optional<UserEntity> result = usersRepository.findByEmail(dto.getEmail());
         if (result.isEmpty()) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong email");
         UserEntity user = result.get();
-        //BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        if (!dto.getPassword().equals(user.getPassword())) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong password");
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        if (!encoder.matches(dto.getPassword(), user.getPassword())) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong password");
         return new TokenResponseDTO(signAccessToken(user));
     }
 
