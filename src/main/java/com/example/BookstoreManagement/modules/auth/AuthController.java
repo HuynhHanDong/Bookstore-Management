@@ -2,6 +2,7 @@ package com.example.BookstoreManagement.modules.auth;
 
 import com.example.BookstoreManagement.database.entities.UserEntity;
 import com.example.BookstoreManagement.modules.auth.dto.LoginDTO;
+import com.example.BookstoreManagement.modules.auth.dto.LoginGoogleDTO;
 import com.example.BookstoreManagement.modules.auth.dto.ProfileDTO;
 import com.example.BookstoreManagement.modules.auth.dto.TokenResponseDTO;
 import jakarta.validation.Valid;
@@ -17,7 +18,7 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid LoginDTO dto) {
+    protected ResponseEntity login(@RequestBody @Valid LoginDTO dto) {
         TokenResponseDTO token = authService.login(dto);
         return new ResponseEntity(token, HttpStatus.OK);
     }
@@ -26,5 +27,11 @@ public class AuthController {
     protected ResponseEntity getProfile() {
         UserEntity user = authService.getProfile();
         return new ResponseEntity(ProfileDTO.fromEntity(user), HttpStatus.OK);
+    }
+
+    @PostMapping("/login-google")
+    protected ResponseEntity loginGoogle(@RequestBody LoginGoogleDTO dto) {
+        TokenResponseDTO responseDTO = authService.loginGoogle(dto);
+        return new ResponseEntity(responseDTO, HttpStatus.OK);
     }
 }

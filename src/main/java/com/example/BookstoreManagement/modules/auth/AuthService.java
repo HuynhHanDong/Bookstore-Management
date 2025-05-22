@@ -6,8 +6,13 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.BookstoreManagement.database.entities.UserEntity;
 import com.example.BookstoreManagement.database.repositories.UsersRepository;
 import com.example.BookstoreManagement.modules.auth.dto.LoginDTO;
+import com.example.BookstoreManagement.modules.auth.dto.LoginGoogleDTO;
 import com.example.BookstoreManagement.modules.auth.dto.TokenResponseDTO;
 import com.example.BookstoreManagement.security.BookstoreConfiguration;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -19,6 +24,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 import java.util.Optional;
 
 @Service
@@ -60,7 +66,33 @@ public class AuthService {
     public UserEntity getProfile() {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
-        UserEntity user = (UserEntity)  authentication.getPrincipal();
+        UserEntity user = (UserEntity) authentication.getPrincipal();
         return user;
+    }
+
+    public TokenResponseDTO loginGoogle(LoginGoogleDTO dto) {
+        GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), GsonFactory.getDefaultInstance())
+                .setAudience(Collections.singletonList(bookstoreConfiguration.getGoogleClientId()))
+                .build();
+        GoogleIdToken idToken = null;
+        try {
+            idToken = verifier.verify(dto.getCredential());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        if (idToken != null) {
+            GoogleIdToken.Payload payload = idToken.getPayload();
+
+            String email = payload.getEmail();
+            Optional<UserEntity> result = usersRepository.findByEmail(email);
+            if (result.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not register yet!");
+            }
+            UserEntity user = result.get();
+            return new TokenResponseDTO(signAccessToken(user));
+        } else {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "ID Token is null");
+        }
     }
 }

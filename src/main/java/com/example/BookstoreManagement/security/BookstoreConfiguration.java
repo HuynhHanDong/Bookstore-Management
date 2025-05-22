@@ -7,9 +7,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @Data
 public class BookstoreConfiguration {
-    @Value("${BookstoreManagement.jwt.secret}")
+    @Value("${jwt.secret}")
     private String jwtSecret;
 
-    @Value("${BookstoreManagement.jwt.issuer}")
+    @Value("${jwt.issuer}")
     private String jwtIssuer;
+
+    @Value("${google_client_id}")
+    private String googleClientId;
 }
