@@ -1,8 +1,10 @@
 package com.example.BookstoreManagement.modules.reviews;
 
 import com.example.BookstoreManagement.database.entities.ReviewEntity;
+import com.example.BookstoreManagement.modules.reviews.dto.AnalyzeReviewDTO;
 import com.example.BookstoreManagement.modules.reviews.dto.ReviewRequestDTO;
 import com.example.BookstoreManagement.modules.reviews.dto.ReviewResponseDTO;
+import com.example.BookstoreManagement.modules.reviews.dto.SentimentResponseDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,5 +53,11 @@ public class ReviewController {
     public ResponseEntity findByBookId(@PathVariable Integer bookId) {
         List<ReviewEntity> reviewList = reviewService.findByBookId(bookId);
         return new ResponseEntity(ReviewResponseDTO.fromEntities(reviewList), HttpStatus.OK);
+    }
+
+    @PostMapping("/analyze")
+    public ResponseEntity analyzeReviewSentiment(@RequestBody @Valid AnalyzeReviewDTO dto) {
+        SentimentResponseDTO sentimentResponse = reviewService.analyzeReviewSentiment(dto);
+        return new ResponseEntity(sentimentResponse, HttpStatus.OK);
     }
 }

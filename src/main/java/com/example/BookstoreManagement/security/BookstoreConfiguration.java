@@ -15,4 +15,7 @@ public class BookstoreConfiguration {
 
     @Value("${google_client_id}")
     private String googleClientId;
+
+    @Value("${sentiment_api-url}")
+    private String sentimentApiUrl;
 }

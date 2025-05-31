@@ -38,7 +38,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/categories/**")
                         .hasAnyAuthority(Authority.of(1).getAuthority())
-                        .requestMatchers(HttpMethod.POST, "/books/", "/book-categories/")
+                        .requestMatchers(HttpMethod.POST, "/books/", "/book-categories/", "/reviews/analyze")
                         .hasAnyAuthority(Authority.of(1).getAuthority())
                         .requestMatchers(HttpMethod.PUT, "/books/**")
                         .hasAnyAuthority(Authority.of(1).getAuthority())

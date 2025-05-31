@@ -6,10 +6,14 @@ import com.example.BookstoreManagement.database.entities.UserEntity;
 import com.example.BookstoreManagement.database.repositories.BooksRepository;
 import com.example.BookstoreManagement.database.repositories.ReviewsRepository;
 import com.example.BookstoreManagement.database.repositories.UsersRepository;
+import com.example.BookstoreManagement.modules.reviews.dto.AnalyzeReviewDTO;
 import com.example.BookstoreManagement.modules.reviews.dto.ReviewRequestDTO;
+import com.example.BookstoreManagement.modules.reviews.dto.SentimentResponseDTO;
+import com.example.BookstoreManagement.security.BookstoreConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -25,6 +29,11 @@ public class ReviewService {
 
     @Autowired
     private UsersRepository usersRepository;
+
+    @Autowired
+    BookstoreConfiguration bookstoreConfiguration;
+
+    private final RestTemplate restTemplate = new RestTemplate();
 
     public void addReview(ReviewRequestDTO dto) {
         Optional<BookEntity> book = booksRepository.findByBookId(dto.getBookId());
@@ -62,5 +71,19 @@ public class ReviewService {
         if (book.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found");
         List<ReviewEntity> reviewList = reviewsRepository.findByBookId(book.get());
         return reviewList;
+    }
+
+    public SentimentResponseDTO analyzeReviewSentiment(AnalyzeReviewDTO dto) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<AnalyzeReviewDTO> entity = new HttpEntity<>(dto, headers);
+
+        String url = bookstoreConfiguration.getSentimentApiUrl();
+        ResponseEntity<SentimentResponseDTO> response = restTemplate.postForEntity(
+                url, entity, SentimentResponseDTO.class
+        );
+
+        return response.getBody();
     }
 }
