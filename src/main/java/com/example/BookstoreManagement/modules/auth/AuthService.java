@@ -66,8 +66,12 @@ public class AuthService {
     public UserEntity getProfile() {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
-        UserEntity user = (UserEntity) authentication.getPrincipal();
-        return user;
+        if (authentication != null) {
+            UserEntity user = (UserEntity) authentication.getPrincipal();
+            return user;
+        } else {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Access token is null or incorrect!");
+        }
     }
 
     public TokenResponseDTO loginGoogle(LoginGoogleDTO dto) {
@@ -92,7 +96,7 @@ public class AuthService {
             UserEntity user = result.get();
             return new TokenResponseDTO(signAccessToken(user));
         } else {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "ID Token is null");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Google ID Token is null");
         }
     }
 }

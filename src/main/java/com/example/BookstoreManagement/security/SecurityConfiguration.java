@@ -36,22 +36,25 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/categories/**")
+                        // Admin only
+                        .requestMatchers(HttpMethod.POST, "/books/", "/categories/", "/book-categories/", "/reviews/analyze")
                         .hasAnyAuthority(Authority.of(1).getAuthority())
-                        .requestMatchers(HttpMethod.POST, "/books/", "/book-categories/", "/reviews/analyze")
+                        .requestMatchers(HttpMethod.PUT, "/books/*", "/categories/*")
                         .hasAnyAuthority(Authority.of(1).getAuthority())
-                        .requestMatchers(HttpMethod.PUT, "/books/**")
+                        .requestMatchers(HttpMethod.DELETE, "/books/*", "/categories/*", "/book-categories/*")
                         .hasAnyAuthority(Authority.of(1).getAuthority())
-                        .requestMatchers(HttpMethod.DELETE, "/books/**", "/book-categories/**")
+                        .requestMatchers(HttpMethod.GET, "/users/", "/book-categories/")
                         .hasAnyAuthority(Authority.of(1).getAuthority())
-                        .requestMatchers(HttpMethod.GET, "/users/")
-                        .hasAnyAuthority(Authority.of(1).getAuthority())
-                        .requestMatchers(HttpMethod.PUT, "/users/**")
+                        // Both admin and registered users
+                        .requestMatchers(HttpMethod.GET, "/users/*", "/auth/profile")
+                        .authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/users/*")
                         .authenticated()
                         .requestMatchers(HttpMethod.POST, "/reviews/")
                         .authenticated()
-                        .requestMatchers(HttpMethod.DELETE, "/reviews/**")
+                        .requestMatchers(HttpMethod.DELETE, "/reviews/*")
                         .authenticated()
+                        // Public endpoints
                         .anyRequest()
                         .permitAll())
                 .csrf(csrf -> csrf.disable())

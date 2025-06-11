@@ -48,12 +48,12 @@ public class BookService {
     }
 
     public List<BookEntity> findByTitle(String title) {
-        List<BookEntity> bookList = booksRepository.findByTitle(title);
+        List<BookEntity> bookList = booksRepository.findByTitleContainingIgnoreCase(title);
         return bookList;
     }
 
     public List<BookEntity> findByAuthor(String author) {
-        List<BookEntity> bookList = booksRepository.findByAuthor(author);
+        List<BookEntity> bookList = booksRepository.findByAuthorContainingIgnoreCase(author);
         return bookList;
     }
 
