@@ -1,5 +1,6 @@
 package com.example.BookstoreManagement.modules.books.dto;
 
+import com.example.BookstoreManagement.utils.ValidIsbn;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -14,7 +15,7 @@ public class BookRequestDTO {
     private String description;
 
     @NotBlank
-    @Size(min = 1, max = 13)
+    @ValidIsbn
     private String isbn;
 
     @NotBlank
