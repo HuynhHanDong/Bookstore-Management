@@ -6,11 +6,12 @@ import com.example.BookstoreManagement.database.entities.UserEntity;
 import com.example.BookstoreManagement.database.repositories.BooksRepository;
 import com.example.BookstoreManagement.database.repositories.ReviewsRepository;
 import com.example.BookstoreManagement.database.repositories.UsersRepository;
-import com.example.BookstoreManagement.modules.reviews.dto.AnalyzeReviewDTO;
+import com.example.BookstoreManagement.modules.reviews.dto.AnalyzeContentRequestDTO;
 import com.example.BookstoreManagement.modules.reviews.dto.ReviewRequestDTO;
 import com.example.BookstoreManagement.modules.reviews.dto.SentimentResponseDTO;
 import com.example.BookstoreManagement.security.BookstoreConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -31,7 +32,7 @@ public class ReviewService {
     private UsersRepository usersRepository;
 
     @Autowired
-    BookstoreConfiguration bookstoreConfiguration;
+    private BookstoreConfiguration bookstoreConfiguration;
 
     private final RestTemplate restTemplate = new RestTemplate();
 
@@ -61,23 +62,33 @@ public class ReviewService {
         return reviewList;
     }
 
-    public List<ReviewEntity> findByRate(Integer rate) {
-        List<ReviewEntity> reviewList = reviewsRepository.findByRate(rate);
+    public List<ReviewEntity> findByRate(Integer rate, String sortBy, String order) {
+        Sort sort = Sort.by(Sort.Direction.fromString(order), sortBy);
+        List<ReviewEntity> reviewList = reviewsRepository.findByRate(rate, sort);
         return reviewList;
     }
 
-    public List<ReviewEntity> findByBookId(Integer bookId) {
+    public List<ReviewEntity> findByBookId(Integer bookId, String sortBy, String order) {
         Optional<BookEntity> book = booksRepository.findByBookId(bookId);
         if (book.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found");
-        List<ReviewEntity> reviewList = reviewsRepository.findByBookId(book.get());
+        Sort sort = Sort.by(Sort.Direction.fromString(order), sortBy);
+        List<ReviewEntity> reviewList = reviewsRepository.findByBookId(book.get(), sort);
         return reviewList;
     }
 
-    public SentimentResponseDTO analyzeReviewSentiment(AnalyzeReviewDTO dto) {
+    public SentimentResponseDTO analyzeReviewSentiment(Integer reviewId) {
+        Optional<ReviewEntity> review = reviewsRepository.findByReviewId(reviewId);
+        if (review.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Review not found");
+
+        String content = review.get().getContent();
+        if (content.isBlank()) throw new ResponseStatusException(HttpStatus.OK, "There is no content to analyze");
+
+        AnalyzeContentRequestDTO dto = new AnalyzeContentRequestDTO(content);
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<AnalyzeReviewDTO> entity = new HttpEntity<>(dto, headers);
+        HttpEntity<AnalyzeContentRequestDTO> entity = new HttpEntity<>(dto, headers);
 
         String url = bookstoreConfiguration.getSentimentApiUrl();
         ResponseEntity<SentimentResponseDTO> response = restTemplate.postForEntity(

@@ -2,6 +2,7 @@ package com.example.BookstoreManagement.modules.reviews.dto;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -20,5 +21,6 @@ public class ReviewRequestDTO {
     @Min(1)
     private Integer userId;
 
+    @NotNull
     private String content;
 }

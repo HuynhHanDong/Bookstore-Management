@@ -70,9 +70,11 @@ public class BookController {
         } else if (isbn != null) {
             BookEntity book = bookService.findByIsbn(isbn);
             return new ResponseEntity(BookResponeDTO.fromEntity(book), HttpStatus.OK);
-        } else {
+        } else if (category != null) {
             List<BookCategoryEntity> bookCategoryList = bookCategoryService.findByCategoryName(category);
             return new ResponseEntity(BookCategoryResponseDTO.fromEntities(bookCategoryList), HttpStatus.OK);
+        } else {
+            return new ResponseEntity("No valid search parameter provided", HttpStatus.BAD_REQUEST);
         }
     }
 

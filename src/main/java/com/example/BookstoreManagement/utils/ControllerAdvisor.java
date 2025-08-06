@@ -79,4 +79,8 @@ public class ControllerAdvisor {
         return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(NullPointerException.class)
+    protected ResponseEntity handleNullPointerException(NullPointerException e) {
+        return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

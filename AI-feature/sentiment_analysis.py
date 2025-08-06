@@ -6,19 +6,19 @@ import re
 app = FastAPI()
 
 class Review(BaseModel):
-    text: str
+    content: str
 
 def extract_reason(blob: TextBlob) -> str:
     # Get top adjectives and adverbs
     pos_words = [word for word, tag in blob.tags if tag in ("JJ", "RB")]
     if not pos_words:
-        return "The sentiment is inferred from overall tone."
+        return "The sentiment is inferred from overall tone"
     top_words = ", ".join(pos_words[:3])
-    return f"The sentiment is influenced by words like: {top_words}."
+    return f"The sentiment is influenced by words like: {top_words}"
 
 @app.post("/analyze")
 def analyze_review(review: Review):
-    blob = TextBlob(review.text)
+    blob = TextBlob(review.content)
     polarity = blob.sentiment.polarity
 
     if polarity > 0.1:
