@@ -23,9 +23,23 @@ This project provides a backend system to manage books, categories, users, and u
 
 ### 3rd-Party Integrations
 - **Google OAuth:** Users can log in using their Google accounts.
+- To run the Front End ([Install NodeJS](https://nodejs.org/en) before run):
+```shell
+# Install HTTP Server (install once)
+npm i -g http-server
+
+# Run this when you want to run the Front End
+http-server -p 3000
+```
+_Note:_ Run the script in the front-end folder
 
 ### AI Integration
 - **NLP Sentiment Analysis:** Basic sentiment analysis using Python `TextBlob` library to automatically classify user reviews as positive or negative, providing reasoning based on text polarity and subjectivity.
+- To run the Python API:
+```shell
+py -m uvicorn sentiment_analysis:app --reload
+```
+_Note:_ Run the script in the AI-feature folder
 
 ## Technologies Used
 - Java 17+
