@@ -1,6 +1,9 @@
 package com.example.BookstoreManagement.modules.categories;
 
+import com.example.BookstoreManagement.database.entities.BookCategoryEntity;
 import com.example.BookstoreManagement.database.entities.CategoryEntity;
+import com.example.BookstoreManagement.modules.bookCategories.BookCategoryService;
+import com.example.BookstoreManagement.modules.bookCategories.dto.BookCategoryResponseDTO;
 import com.example.BookstoreManagement.modules.categories.dto.CategoryResponseDTO;
 import com.example.BookstoreManagement.modules.categories.dto.CategoryRequestDTO;
 import jakarta.validation.Valid;
@@ -16,6 +19,9 @@ import java.util.List;
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private BookCategoryService bookCategoryService;
 
     @PostMapping("/")
     public ResponseEntity addCategory(@RequestBody @Valid CategoryRequestDTO dto) {
@@ -47,9 +53,9 @@ public class CategoryController {
         return new ResponseEntity(CategoryResponseDTO.fromEntities(categoryList), HttpStatus.OK);
     }
 
-    @GetMapping("/name/{name}")
-    public ResponseEntity findByName(@PathVariable String name) {
-        CategoryEntity category = categoryService.findByName(name);
-        return new ResponseEntity(CategoryResponseDTO.fromEntity(category), HttpStatus.OK);
+    @GetMapping("/{categoryId}/books")
+    public ResponseEntity getBookList(@PathVariable Integer categoryId) {
+        List<BookCategoryEntity> bookCategoryList = bookCategoryService.findByCategoryId(categoryId);
+        return new ResponseEntity(BookCategoryResponseDTO.fromEntities(bookCategoryList), HttpStatus.OK);
     }
 }

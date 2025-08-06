@@ -44,10 +44,4 @@ public class CategoryService {
         List<CategoryEntity> categoryList = categoriesRepository.findAll();
         return categoryList;
     }
-
-    public CategoryEntity findByName(String name) {
-        Optional<CategoryEntity> category = categoriesRepository.findByName(name);
-        if (category.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
-        return category.get();
-    }
 }

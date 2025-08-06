@@ -37,13 +37,15 @@ public class SecurityConfiguration {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         // Admin only
-                        .requestMatchers(HttpMethod.POST, "/books/", "/categories/", "/book-categories/", "/reviews/analyze")
+                        .requestMatchers("/book-categories/*")
+                        .hasAnyAuthority(Authority.of(1).getAuthority())
+                        .requestMatchers(HttpMethod.POST, "/books/", "/categories/", "/reviews/analyze")
                         .hasAnyAuthority(Authority.of(1).getAuthority())
                         .requestMatchers(HttpMethod.PUT, "/books/*", "/categories/*")
                         .hasAnyAuthority(Authority.of(1).getAuthority())
-                        .requestMatchers(HttpMethod.DELETE, "/books/*", "/categories/*", "/book-categories/*")
+                        .requestMatchers(HttpMethod.DELETE, "/books/*", "/categories/*")
                         .hasAnyAuthority(Authority.of(1).getAuthority())
-                        .requestMatchers(HttpMethod.GET, "/users/", "/book-categories/")
+                        .requestMatchers(HttpMethod.GET, "/users/")
                         .hasAnyAuthority(Authority.of(1).getAuthority())
                         // Both admin and registered users
                         .requestMatchers(HttpMethod.GET, "/users/*", "/auth/profile")

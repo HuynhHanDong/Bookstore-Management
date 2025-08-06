@@ -59,7 +59,7 @@ public class BookService {
 
     public BookEntity findByIsbn(String isbn) {
         Optional<BookEntity> book = booksRepository.findByIsbn(isbn);
-        if (book.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found!");
+        if (book.isEmpty()) throw new ResponseStatusException(HttpStatus.OK, "Book not found!");
         return book.get();
     }
 }

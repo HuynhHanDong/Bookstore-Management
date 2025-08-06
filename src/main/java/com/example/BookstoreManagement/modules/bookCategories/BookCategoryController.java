@@ -34,16 +34,4 @@ public class BookCategoryController {
         List<BookCategoryEntity> bookCategoryList = bookCategoryService.listBookCategory();
         return new ResponseEntity(BookCategoryResponseDTO.fromEntities(bookCategoryList), HttpStatus.OK);
     }
-
-    @GetMapping("/category/{name}")
-    public ResponseEntity findByCategoryName(@PathVariable String name) {
-        List<BookCategoryEntity> bookCategoryList = bookCategoryService.findByCategoryName(name);
-        return new ResponseEntity(BookCategoryResponseDTO.fromEntities(bookCategoryList), HttpStatus.OK);
-    }
-
-    @GetMapping("/book/{bookId}")
-    public ResponseEntity findByBookId(@PathVariable Integer bookId) {
-        List<BookCategoryEntity> bookCategoryList = bookCategoryService.findByBookId(bookId);
-        return new ResponseEntity(BookCategoryResponseDTO.fromEntities(bookCategoryList), HttpStatus.OK);
-    }
 }

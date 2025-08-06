@@ -46,6 +46,13 @@ public class BookCategoryService {
         return bookCategorylist;
     }
 
+    public List<BookCategoryEntity> findByCategoryId(Integer categoryId) {
+        Optional<CategoryEntity> category = categoriesRepository.findByCategoryId(categoryId);
+        if (category.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
+        List<BookCategoryEntity> bookCategorylist = bookCategoriesRepository.findByCategoryId(category.get());
+        return bookCategorylist;
+    }
+
     public List<BookCategoryEntity> findByCategoryName(String name) {
         Optional<CategoryEntity> category = categoriesRepository.findByName(name);
         if (category.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
